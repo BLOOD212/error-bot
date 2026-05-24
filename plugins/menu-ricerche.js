@@ -1,38 +1,43 @@
-import { promises } from 'fs'
+import { promises as fs } from 'fs'
 import { join } from 'path'
 import { xpRange } from '../lib/levelling.js'
 import moment from 'moment-timezone'
 import os from 'os'
 
+// Configurazione immagini random (tutte .jpeg)
+const menuImages = [
+  './menu-1.jpeg',
+  './menu-2.jpeg',
+  './menu-3.jpeg'
+]
+
 const defaultMenu = {
   before: `
-┎━━━━━━━━━━━━━━━━━━━┑
-┃   ✧  𝐁𝐋𝐃 - 𝐒𝐄𝐀𝐑𝐂𝐇  ✧    ┃
-┖━━━━━━━━━━━━━━━━━━━┙
-┌───────────────────┐
-  👤 𝚄𝚜𝚎𝚛: %name
-  🛰️ 𝚂𝚝𝚊𝚝𝚞𝚜: 𝙾𝚗𝚕𝚒𝚗𝚎
-  🔍 𝚂𝚎𝚌𝚝𝚘𝚛: 𝙳𝚊𝚝𝚊 𝚂𝚌𝚊𝚗
-└───────────────────┘
+☠️ 𝗘 𝗥 𝗥 𝗢 𝗥  𝟰 𝟬 𝟰  // 𝘚𝘌𝘈𝘙𝘊𝘏 ☠️
+───────────────────────
+⎔ 𝘊𝘰𝘳𝘦_𝘓𝘪𝘯𝘬: %name
+⎔ 𝘚𝘺𝘴_𝘚𝘵𝘢𝘵𝘶𝗌: 𝘖𝘯𝘭𝘪𝘯𝘦
+⎔ 𝘚𝘊𝘈𝘕_𝘚𝘌𝘊𝘛𝘖𝘙: 𝘋𝘢𝘵𝘢_𝘓𝘦𝘢𝘬
+───────────────────────
 
-*〘 ɪɴɪᴛɪᴀᴛɪɴɢ ᴅᴇᴇᴘ sᴄᴀɴ... 〙*
+» 𝘐𝘕𝘐𝘡𝘐𝘈𝘕𝘋𝘖 𝘚𝘊𝘈𝘕𝘕𝘌𝘙𝘐𝘡𝘡𝘈𝘡𝘐𝘖𝘕𝘌...
 `.trimStart(),
-  header: '┍━━━〔 %category 〕━━━┑',
-  body: '┇ 🔎  *%cmd*',
-  footer: '┕━━━━━──ׄ──ׅ──ׄ──━━━━━┙\n',
-  after: `_ʙʟᴅ-ʙᴏᴛ ɪɴᴛᴇʟʟɪɢᴇɴᴄᴇ sʏsᴛᴇᴍ_`
+  header: 'ョ ── %category 𪚥',
+  body: '    ⤿ 🔎 %cmd ╳',
+  footer: '͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞\n',
+  after: `_𝘚𝘺𝘴𝘵𝘦𝘮 𝘸𝘪𝘭𝘭 𝘯𝘰𝘵 𝘳𝘦𝘉𝘰𝘰𝘵. 𝘌𝘯𝘫𝘰ย 𝘵𝘩𝗲 𝘤𝘩𝘢𝘰𝘴._`
 }
 
 let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
   let tags = {
-    'ricerca': 'ᴅɪɢɪᴛᴀʟ ɪɴᴠᴇsᴛɪɢᴀᴛɪᴏɴ'
+    'ricerca': '𝘚𝘠𝘚𝘛𝘌𝘔_𝘔𝘈𝘓𝘍𝘜𝘕𝘊𝘛𝘐𝘖𝘕_𝘚𝘊𝘈𝘕'
   }
 
   try {
     let name = await conn.getName(m.sender) || 'User'
     let _uptime = process.uptime() * 1000
     let uptime = clockString(_uptime)
-    let user = global.db.data.users[m.sender]
+    let user = global.db.data.users[m.sender] || {}
     let { level, role, eris } = user
 
     let help = Object.values(global.plugins).filter(p => !p.disabled).map(p => ({
@@ -66,22 +71,40 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
     let text = _text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join('|')})`, 'g'), (_, name) => '' + replace[name])
 
+    await m.react('💥')
+
+    // Estrazione random dell'immagine .jpeg
+    let randomImg = menuImages[Math.floor(Math.random() * menuImages.length)]
+    let imageBuffer = null
+    
+    try {
+      imageBuffer = await fs.readFile(randomImg)
+    } catch (e) {
+      console.log(`⚠️ Immagine ${randomImg} non trovata, tento il recupero...`)
+      for (let img of menuImages) {
+        try {
+          imageBuffer = await fs.readFile(img)
+          break
+        } catch (err) {}
+      }
+    }
+
+    // Invio con immagine locale randomizzata e layout modificato
     await conn.sendMessage(m.chat, { 
-      text: text.trim(), 
+      ...(imageBuffer ? { image: imageBuffer } : {}),
+      caption: text.trim(), 
       contextInfo: {
         mentionedJid: [m.sender],
         forwardedNewsletterMessageInfo: {
           newsletterJid: '120363232743845068@newsletter',
-          newsletterName: "✧ 𝙱𝙻𝙳-𝙱𝙾𝚃 𝚂𝙴𝙰𝚁𝙲𝙷 𝚂𝚈𝚂𝚃𝙴𝙼 ✧"
+          newsletterName: "☠️ ᴇʀʀᴏʀ⁴⁰⁴ // ᴅᴀᴛᴀ sᴄᴀɴ ☠️"
         }
       }
     }, { quoted: m })
 
-    await m.react('🔍')
-
   } catch (e) {
     console.error(e)
-    conn.reply(m.chat, '❌ Error in Search Module.', m)
+    conn.reply(m.chat, '❌ 𝘍𝘈𝘛𝘈𝘓_𝘌𝘙𝘙𝘖𝘙: Fallimento irreversibile del modulo di ricerca.', m)
   }
 }
 
