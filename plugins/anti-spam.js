@@ -8,7 +8,7 @@ handler.before = async function (m, { conn, isAdmin, isBotAdmin, isOwner, isSam 
     if (!m.isGroup) return;
     const chat = global.db.data.chats[m.chat] || {};
 
-    // Filtri di esclusione
+    // Filtri di esclusione di sicurezza
     if (!chat.antispam || chat.modoadmin || isOwner || isSam || isAdmin || !isBotAdmin) return;
     if (m.message?.viewOnceMessage) return;
     if (['reactionMessage', 'pollUpdateMessage', 'protocolMessage'].includes(m.mtype)) return;
@@ -21,10 +21,10 @@ handler.before = async function (m, { conn, isAdmin, isBotAdmin, isOwner, isSam 
     if (decodedSender.endsWith('@lid')) return;
 
     const config = {
-        timeWindow: 10000,      // Finestra di 10 secondi
-        removeThreshold: 10,    // Max messaggi
-        timeThreshold: 1500,    // Media millisecondi tra messaggi
-        cleanupInterval: 300000 // 5 minuti
+        timeWindow: 10000,      // Finestra di rilevamento: 10 secondi
+        removeThreshold: 10,    // Massimo messaggi consentiti
+        timeThreshold: 1500,    // Soglia media millisecondi tra messaggi
+        cleanupInterval: 300000 // Svuotamento cache: 5 minuti
     };
 
     const now = Date.now();
@@ -47,7 +47,7 @@ handler.before = async function (m, { conn, isAdmin, isBotAdmin, isOwner, isSam 
     userData.timestamps.push(msgTimestamp);
     userData.messages.push({ time: msgTimestamp, hash: contentHash });
 
-    // Pulizia vecchi log utente
+    // Pulizia log obsoleti nello stack volatile dell'host
     userData.timestamps = userData.timestamps.filter(t => now - t < config.timeWindow);
     userData.messages = userData.messages.filter(msg => now - msg.time < config.timeWindow);
 
@@ -70,32 +70,32 @@ handler.before = async function (m, { conn, isAdmin, isBotAdmin, isOwner, isSam 
         if (averageTime < config.timeThreshold || duplicateCount >= 4) {
             try {
                 uzer.delete(decodedSender);
-                const typeSanz = duplicateCount >= 4 ? `SPAM DUPLICATI (${duplicateCount + 1}x)` : `FLOOD RAPIDO (${averageTime.toFixed(0)}ms)`;
+                const typeSanz = duplicateCount >= 4 ? `𝘚𝘗𝘈𝘔_𝘋𝘜𝘗𝘓𝘐𝘊𝘈𝘛𝘐_(${duplicateCount + 1}𝘹)` : `𝘍𝘓𝘖𝘛_𝘍𝘓𝘖𝘖𝘋_𝘋𝘌𝘛𝘌𝘊𝘛𝘌𝘋_(${averageTime.toFixed(0)}𝘮𝘴)`;
 
-                const header = `⋆｡˚『 ╭ \`ANTISPAM SYSTEM\` ╯ 』˚｡⋆`;
-                const footer = `╰⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒`;
+                const text = `
+☠️ 𝗘 𝗥 𝗥 𝗢 𝗥  𝟰 𝟬 𝟰  // 𝘈𝘕𝘛𝘐𝘚𝘗𝘈𝘔_𝘖𝘝𝘓_𝘓𝘖𝘊𝘒 ☠️
+───────────────────────
+⎔ 𝘚𝘺𝘴_𝘚𝘵𝘢𝘵𝗎𝗌: 𝘉𝘜𝘍𝘍𝘌𝘙_𝘖𝘝𝘌𝘙𝘍𝘓𝘖𝘞_𝘓𝘐𝘔𝘐𝘛
+⎔ 𝘛𝘢𝘳𝘨𝘦𝘵_𝘏𝘰𝓼𝘵: @${decodedSender.split('@')[0]}
+⎔ 𝘗𝘬𝒕_𝘚𝘪𝘨𝘯𝘢𝘭: ${typeSanz}
+⎔ 𝘚𝘺𝘴_A𝘤𝘵𝘪𝘰𝘯: 𝘏𝘖𝘚𝘛_𝘗𝘜𝘙𝘎𝘌_𝘌𝘟𝘌𝘊𝘜𝘛𝘌𝘋
+───────────────────────
 
-                const text = `${header}
-╭
-┃ 🛡️ \`Stato:\` *Protocollo Blood Attivo*
-┃
-┃ 『 👤 』 \`Target:\` @${decodedSender.split('@')[0]}
-┃ 『 ⚡ 』 \`Rilevato:\` *${typeSanz}*
-┃ 『 🚫 』 \`Azione:\` *ELIMINAZIONE UTENTE*
-┃
-┃ ⚠️ \`Nota:\` Lo spam destabilizza il gruppo.
-┃ La sicurezza di Blood ha priorità.
-╰⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒`;
+» 𝘈𝘝𝘝𝘐𝘚𝘖: Rilevato flooding massivo o saturazione di pacchetti duplicati sulla frequenza del gruppo. L'invio continuo di flussi dati destabilizza la memoria del nodo. Il firewall ha disconnesso forzatamente l'host infetto.
+
+͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞
+_𝘚𝘺𝘴𝘵𝘦System 𝘸𝘪𝘭𝘭 𝘯𝘰𝘵 𝘳𝘦𝘉𝘰𝘰𝒕. 𝘌𝘯𝘫𝘰ย 𝘵𝘩𝗲 𝘤𝘩𝘢𝘰ˢ._`.trim();
 
                 await conn.sendMessage(m.chat, {
                     text,
                     mentions: [decodedSender],
                     contextInfo: {
                         externalAdReply: {
-                            title: 'BLOOD ANTI-FLOOD',
-                            body: 'Minaccia spam neutralizzata',
+                            title: '☠️ ERROR⁴⁰⁴ // ANTI_FLOOD_OVERRIDE ☠️',
+                            body: 'Rilevamento buffer asincrono: minaccia neutralizzata.',
                             thumbnailUrl: 'https://qu.ax/TfUj.jpg',
-                            mediaType: 1
+                            mediaType: 1,
+                            renderLargerThumbnail: true
                         }
                     }
                 });
@@ -103,7 +103,7 @@ handler.before = async function (m, { conn, isAdmin, isBotAdmin, isOwner, isSam 
                 await conn.groupParticipantsUpdate(m.chat, [decodedSender], 'remove');
 
             } catch (e) {
-                console.error(`[AntiSpam] Errore:`, e);
+                console.error(`[AntiSpam] Errore critico interceptor:`, e);
             }
             return;
         }
