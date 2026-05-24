@@ -20,7 +20,7 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isSam }) {
   const hasNormalMedia = !!m.message?.imageMessage || !!m.message?.videoMessage
   if (!hasNormalMedia) return false
 
-  // Eliminazione del messaggio
+  // Eliminazione del payload multimediale non autorizzato
   await conn.sendMessage(m.chat, {
       delete: {
         remoteJid: m.chat,
@@ -30,27 +30,28 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isSam }) {
       },
     }).catch(() => {})
 
-  // Messaggio estetico in stile 𝐄𝐑𝐑𝐎𝐑⁴⁰⁴
-  const header = `⋆｡˚『 ╭ \`ANTIMEDIA SYSTEM\` ╯ 』˚｡⋆`
-  const text = `${header}
-╭
-┃ 🛡️ \`Stato:\` *Protocollo Blood Attivo*
-┃
-┃ 『 👤 』 \`Target:\` @${m.sender.split('@')[0]}
-┃ 『 🖼️ 』 \`Rilevato:\` *Media Permanente*
-┃ 『 🚫 』 \`Azione:\` *Eliminazione immediata*
-┃
-┃ ⚠️ \`Nota:\` In questo gruppo sono ammessi 
-┃ solo media *Visualizza una volta*.
-╰⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒`
+  // Generazione del log di violazione in stile ERROR⁴⁰⁴
+  const text = `
+☠️ 𝗘 𝗥 𝗥 𝗢 𝗥  𝟰 𝟬 𝟰  // 𝘔𝘌𝘋𝘐𝘈_𝘉𝘙𝘌𝘈𝘊𝘏 ☠️
+───────────────────────
+⎔ 𝘚𝘺𝘴_𝘚𝘵𝘢𝘵𝗎𝗌: 𝘍𝘐𝘙𝘌𝘞𝘈𝘓𝘓_𝘈𝘊𝘛𝘐𝘝𝘌
+⎔ 𝘛𝘢𝘳𝘨𝘦𝘵_𝘏𝘰𝘴𝘵: @${m.sender.split('@')[0]}
+⎔ 𝘋𝘦𝘵𝘦𝘤𝘵_𝘗𝘬𝘵: 𝘗𝘌𝘙𝘔𝘈𝘕𝘌𝘕𝘛_𝘔𝘌𝘋𝘐𝘈
+⎔ 𝘚𝘺𝘴_𝘈𝘤𝘵𝘪𝘰𝘯: 𝘗𝘜𝘙𝘎𝘌_𝘌𝘟𝘌𝘊𝘜𝘛𝘌𝘋
+───────────────────────
+
+» 𝘈𝘝𝘝𝘐𝘚𝘖: In questo nodo di rete sono autorizzati esclusivamente i pacchetti *𝘝𝘪𝘴𝘶𝘢𝘭𝘪𝘻𝘻𝘢_𝘶𝘯𝘢_𝘷𝘰𝘭𝘵𝘢*. I flussi di archiviazione permanenti vengono intercettati e distrutti dal firewall.
+
+͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞
+_𝘚𝘺𝘴𝘵𝘦𝘮 𝘸𝘪𝘭𝘭 𝘯𝘰𝘵 𝘳𝘦𝘉𝘰𝘰𝘵. 𝘌𝘯𝘫𝘰ย 𝘵𝘩𝗲 𝘤𝘩𝘢𝘰𝘴._`.trim()
 
   await conn.sendMessage(m.chat, {
       text,
       mentions: [m.sender],
       contextInfo: {
         externalAdReply: {
-          title: 'BLOOD SECURITY',
-          body: 'Restrizione media attiva',
+          title: '☠️ ERROR⁴⁰⁴ // MALWARE_INTERCEPT ☠️',
+          body: 'Protocollo Antimedia: payload eliminato.',
           thumbnailUrl: 'https://qu.ax/TfUj.jpg',
           mediaType: 1
         }
