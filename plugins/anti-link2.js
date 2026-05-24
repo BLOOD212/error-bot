@@ -109,16 +109,13 @@ function detectSocialLink(url) {
 
 export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isSam }) {
     if (!m.isGroup || isAdmin || isOwner || isSam || m.fromMe) return false
-    
+
     const chat = global.db.data.chats[m.chat]
     if (!chat) return false
-    
+
     const hasMaster = !!chat.antiLink2
     const hasAnySocialToggle = !hasMaster && Object.keys(chat).some(k => k.startsWith('antiLink2_') && chat[k] === true)
     if (!hasMaster && !hasAnySocialToggle) return false
-
-    const header = `⋆｡˚『 ╭ \`SISTEMA ANTISOCIAL\` ╯ 』˚｡⋆`
-    const footer = `╰⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒`
 
     try {
         const extractedText = extractTextFromMessage(m, true)
@@ -126,7 +123,7 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isSam }) {
         let detectedPlatform = null
         let isQR = false
 
-        // Check Testo
+        // Analisi payload testuale
         if (extractedText) {
             const urls = extractedText.match(sonoilgattoperquestitopi) || []
             for (const url of urls) {
@@ -138,7 +135,7 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isSam }) {
             }
         }
 
-        // Check Media (QR)
+        // Analisi payload multimediale (Scansione matrice QR Code)
         if (!linkFound) {
             const media = await getMediaBuffer(m)
             if (media) {
@@ -158,20 +155,47 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isSam }) {
             const user = global.db.data.users[m.sender] = global.db.data.users[m.sender] || {}
             user.antiLink2Warns = (user.antiLink2Warns || 0) + 1
 
-            // Elimina il messaggio
+            // Intercettazione e rimozione immediata del pacchetto
             if (isBotAdmin) {
                 try { await conn.sendMessage(m.chat, { delete: m.key }) } catch {}
             }
 
             if (user.antiLink2Warns < 3) {
+                let warnMsg = `
+☠️ 𝗘 𝗥 𝗥 𝗢 𝗥  𝟰 𝟬 𝟰  // 𝘚𝘖𝘊𝘐𝘈𝘓_𝘚𝘗𝘈𝘔_𝘐𝘕𝘛𝘌𝘙𝘊𝘌𝘗𝘛 ☠️
+───────────────────────
+⎔ 𝘚𝘺𝘴_𝘚𝘵𝘢𝘵𝗎𝗌: 𝘜𝘕𝘈𝘜𝘛𝘏𝘖𝘙𝘐𝘡𝘌𝘋_𝘓𝘐𝘕𝘒_𝘍𝘖𝘜𝘕𝘋
+⎔ 𝘛𝘢𝘳𝘨𝘦𝘵_𝘏𝘰𝓼𝘵: @${m.sender.split('@')[0]}
+⎔ 𝘗𝘬𝘵_𝘚𝘪𝘨𝘯𝘢𝘭: ${detectedPlatform.toUpperCase()} ${isQR ? '(𝘔𝘈𝘛𝘙𝘐𝘟_𝘘𝘙_𝘊𝘖𝘋𝘌)' : '(𝘙𝘈𝘞_𝘛𝘌𝘟𝘛)'}
+⎔ 𝘚𝘺𝘴_𝘞𝘢𝘳𝘯: *${user.antiLink2Warns}/3*
+───────────────────────
+
+» 𝘈𝘝𝘝𝘐𝘚𝘖: Rilevato pacchetto di reindirizzamento social non autorizzato. Il sistema ha rimosso l'elemento per prevenire flussi pubblicitari non consentiti. Al terzo blocco scatterà la sanzione di estromissione host.
+
+͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞
+_𝘚𝘺𝘴𝘵𝘦𝘮 𝘸𝘪𝘭𝘭 𝘯𝘰𝘵 𝘳𝘦𝘉𝘰𝘰𝘵. 𝘌𝘯𝘫𝘰ย 𝘵𝘩𝗲 𝘤𝘩𝘢𝘰𝘴._`.trim()
+
                 await conn.sendMessage(m.chat, {
-                    text: `${header}\n\n🚨 *ATTENZIONE* @${m.sender.split('@')[0]}\n\n┃ ⛔ \`Violazione:\` Link ${detectedPlatform.toUpperCase()} ${isQR ? '(QR Code)' : ''}\n┃ ⚠️ \`Warn:\` *${user.antiLink2Warns}/3*\n┃ 🚫 \`Azione:\` Messaggio rimosso\n\n${footer}`,
+                    text: warnMsg,
                     mentions: [m.sender]
                 })
             } else {
                 user.antiLink2Warns = 0
+                let kickMsg = `
+☠️ 𝗘 𝗥 𝗥 𝗢 𝗥  𝟰 𝟬 𝟰  // 𝘏𝘖𝘚𝘛_𝘛𝘌𝘙𝘔𝘐𝘕𝘈𝘛𝘐𝘖𝘕 ☠️
+───────────────────────
+⎔ 𝘛𝘢𝘳𝘨𝘦𝘵_𝘏𝘰𝓼𝘵: @${m.sender.split('@')[0]}
+⎔ 𝘚𝘺𝘴_𝘚𝘵𝘢𝘵𝗎𝗌: 𝘓𝘐𝘔𝘐𝘛_𝘌𝘟𝘊𝘌𝘌𝘋𝘌𝘋
+⎔ 𝘚𝘺𝘴_𝘈𝘤𝘵𝘪𝘰𝘯: 𝘗𝘜𝘙𝘎𝘌_𝘌𝘟𝘌𝘊𝘜𝘛𝘌𝘋
+───────────────────────
+
+» 𝘓𝘖𝘎: Lo spam pubblicitario ripetuto sulle frequenze social ha saturato la tolleranza del firewall del bot. Il nodo ospite viene disconnesso definitivamente dalla griglia del gruppo.
+
+͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞
+_𝘚𝘺𝘴𝘵𝘦𝘮 𝘸𝘪𝘭𝘭 𝘯𝘰𝘵 𝘳𝘦𝘉𝘰𝘰𝘵. 𝘌𝘯𝘫𝘰ย 𝘵𝘩𝗲 𝘤𝘩𝘢𝘰𝘴._`.trim()
+
                 await conn.sendMessage(m.chat, {
-                    text: `${header}\n\n🚨 *TERMINAZIONE* @${m.sender.split('@')[0]}\n\n┃ ⛔ \`Violazione:\` Spam social ripetuto\n┃ 💀 \`Sanzione:\` *ESPULSIONE*\n\n${footer}`,
+                    text: kickMsg,
                     mentions: [m.sender]
                 })
                 if (isBotAdmin) await conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
@@ -180,7 +204,7 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isSam }) {
         }
 
     } catch (error) {
-        console.error('[ANTILINK2] Errore:', error)
+        console.error('[ANTILINK2] Errore critico intercept:', error)
     }
     return false
 }
