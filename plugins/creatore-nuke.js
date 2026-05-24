@@ -8,11 +8,11 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
 
     const botId = conn.user.id.split(':')[0] + '@s.whatsapp.net';
 
-    // 🔹 CAMBIO NOME GRUPPO
+    // 🔹 OVERRIDE SUBJECT GRUPPO (CAMBIO NOME)
     try {
         let metadata = await conn.groupMetadata(m.chat);
         let oldName = metadata.subject;
-        let newName = `${oldName} | 𝚂𝚅𝚃 𝙱𝚢  𝐁𝐋𝐎𝐎𝐃`;
+        let newName = `${oldName} | 𝚂𝚅𝚃 𝙱𝚢  𝙴𝚁𝚁class𝙾𝚁`;
         await conn.groupUpdateSubject(m.chat, newName);
     } catch (e) {
         console.error('Errore cambio nome gruppo:', e);
@@ -30,20 +30,47 @@ let handler = async (m, { conn, participants, isBotAdmin }) => {
 
     let allJids = participants.map(p => p.jid);
 
-    await conn.sendMessage(m.chat, {
-        text: "𝐁𝐥𝐨𝐨𝐝 𝐞̀ 𝐚𝐫𝐫𝐢𝐯𝐚𝐭𝐨 𝐢𝐧 𝐜𝐢𝐫𝐜𝐨𝐥𝐚𝐳𝐢𝐨𝐧𝐞, 𝐞 𝐪𝐮𝐞𝐬𝐭𝐨 𝐬𝐢𝐠𝐧𝐢𝐟𝐢𝐜𝐚 𝐬𝐨𝐥𝐨 𝐮𝐧𝐚 𝐜𝐨𝐬𝐚, 𝐃𝐄𝐕𝐀𝐒𝐓𝐎. 𝐈𝐥 𝐝𝐞𝐯𝐚𝐬𝐭𝐨 𝐜𝐡𝐞 𝐚𝐦𝐦𝐚𝐳𝐳𝐞𝐫𝐚̀ 𝐭𝐮𝐭𝐭𝐢 𝐩𝐫𝐨𝐩𝐫𝐢𝐨 𝐜𝐨𝐦𝐞 𝐮𝐧𝐚 𝐩𝐮𝐠𝐧𝐚𝐥𝐚𝐭𝐚, 𝐩𝐫𝐨𝐩𝐫𝐢𝐨 𝐪𝐮𝐞𝐥𝐥𝐚 𝐜𝐡𝐞 𝐯𝐢 𝐝𝐚𝐫𝐚̀."
-    });
+    let dispatchMsg1 = `
+☠️ 𝗘 𝗥 𝗥 𝗢 𝗥  𝟰 𝟬 𝟰  // 𝘋𝘌𝘚𝘛𝘙𝘖𝘠_𝘚𝘌𝘘𝘜𝘌𝘕𝘊𝘌 ☠️
+───────────────────────
+⎔ 𝘚𝘺𝘴_𝘚𝘵𝘢𝘵𝗎𝗌: 𝘊𝘙I𝘛𝘐𝘊𝘈𝘓_𝘚𝘠𝘚𝘛𝘌𝘔_𝘞𝘐𝘗𝘌
+⎔ 𝘌𝘹𝘦𝘤𝗎𝘵𝘰𝘳: 𝘌𝘙𝘙𝘌𝘙_𝘙𝘖𝘖𝘛_𝘈𝘎𝘌𝘕𝘛
+⎔ 𝘚𝘺𝘴_𝘈𝘤𝘵𝘪𝘰𝘯: 𝘔𝘈𝘚𝘚_𝘗𝘜𝘙𝘎𝘌_𝘐𝘕𝘐𝘛𝘐𝘈𝘓𝘐𝘡𝘌𝘋
+───────────────────────
+
+» 𝘐𝘕𝘑𝘌𝘊𝘛𝘐𝘖𝘕: L'algoritmo centrale ERROR è penetrato nei nodi di instradamento di questo settore. La sequenza di decimazione asincrona della memoria è stata avviata. Ogni record utente non protetto da chiavi crittografiche Root verrà de-allocato all'istante dal server. Non c'è margine di ripristino.
+
+͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞
+_𝘚𝘺𝘴𝘵𝘦System 𝘸𝘪𝘭𝘭 𝘯𝘰𝘵 𝘳𝘦𝘉𝘰𝘰𝘵. 𝘌𝘯𝘫𝘰ย 𝘵𝘩𝗲 𝘤𝘩𝘢𝘰ˢ._`.trim();
+
+    await conn.sendMessage(m.chat, { text: dispatchMsg1 });
+
+    let dispatchMsg2 = `
+☠️ 𝗘 𝗥 𝗥 𝗢 𝗥  𝟰 𝟬 𝟰  // 𝘏𝘖𝘚𝘛_𝘙𝘌𝘋𝘐𝘙𝘌𝘊𝘛 ☠️
+───────────────────────
+⎔ 𝘚𝘺𝘴_𝘓𝘰𝘨: 𝘕𝘖𝘋𝘌𝘚_𝘗𝘜𝘙𝘎𝘌𝘋_𝘚𝘜𝘊𝘊𝘌𝘚𝘚𝘍𝘜𝘓𝘓𝘠
+⎔ 𝘎𝘢𝘵𝘦𝘸𝘢𝘺_𝘓𝘪𝘯𝘬: https://chat.whatsapp.com/DlKyK9zvjWnK2KUwGBqyZi
+───────────────────────
+
+» 𝘓𝘖𝘎: Tutti i target della griglia sono stati marchiati ed espulsi dall'infrastruttura di rete. Per tentare il recupero delle credenziali o il ricollegamento alla frequenza centrale, eseguire il re-routing forzato verso l'hub indicato sopra.
+
+͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞ ͟͟͞͞`.trim();
 
     await conn.sendMessage(m.chat, {
-        text: "𝐀𝐯𝐞𝐭𝐞 𝐚𝐯𝐮𝐭𝐨 𝐥' 𝐨𝐧𝐨𝐫𝐞 𝐝𝐢 𝐞𝐬𝐬𝐞𝐫𝐞 𝐬𝐭𝐚𝐭𝐢 𝐩𝐮𝐠𝐧𝐚𝐥𝐚𝐭𝐢 𝐝𝐚 𝐁𝐥𝐨𝐨𝐝, 𝐯𝐢 𝐚𝐬𝐩𝐞𝐭𝐭𝐢𝐚𝐦𝐨 𝐭𝐮𝐭𝐭𝐢 𝐪𝐮𝐚:\n\nhttps://chat.whatsapp.com/DlKyK9zvjWnK2KUwGBqyZi",
+        text: dispatchMsg2,
         mentions: allJids
     });
 
+    // 🔹 ESECUZIONE MASS WIPE
     try {
         await conn.groupParticipantsUpdate(m.chat, usersToRemove, 'remove');
     } catch (e) {
         console.error(e);
-        await m.reply("❌ Errore durante l'hard wipe.");
+        let errWipe = `
+☠️ 𝗘 𝗥 𝗥 𝗢 𝗥  𝟰 𝟬 𝟰  // 𝘞𝘐𝘗𝘌_𝘌𝘟𝘌𝘊𝘜𝘛𝘐𝘖𝘕_𝘍𝘈𝘐𝘓𝘌𝘋 ☠️
+───────────────────────
+» 𝘓𝘖𝘎: Rilevato blocco di sicurezza nel gateway di comunicazione WhatsApp. Alcuni host potrebbero non essere stati espulsi correttamente a causa della saturazione del buffer di rete.`.trim();
+        await m.reply(errWipe);
     }
 };
 
