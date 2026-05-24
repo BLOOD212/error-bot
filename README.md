@@ -4,6 +4,18 @@
     <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=50&pause=500&color=00FF00&center=true&vCenter=true&width=700&height=120&lines=⚠️+ERROR-BOT+⚠️;[SYSTEM_CRITICAL];FATAL_ERROR_DETECTED" alt="Typing SVG" />
   </p>
 
+  <div style="width: 100%; overflow: hidden; background: #020f02; border: 1px dashed #00FF00; padding: 10px 0; line-height: 1.2;">
+    <marquee direction="left" scrollamount="12" style="font-size: 14px; font-weight: bold; color: #00FF00;">
+      01010100 01001000 01000101 _ BLD-BLOOD-BOT _ ERROR_DUMP_0x4F9B >>> / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
+    </marquee>
+    <marquee direction="right" scrollamount="15" style="font-size: 16px; font-weight: bold; color: #00FF00; margin-left: 50px;">
+      \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ SYSTEM_OVERRIDE_ACTIVE [EXE] 00FF00 <<<<<<<<<<<<<<<<<<<<
+    </marquee>
+    <marquee direction="left" scrollamount="9" style="font-size: 12px; color: #008800; margin-left: -30px;">
+      // ERROR-BLOOD // BYPASS_ANTI_BAN_5.0 // CORE_GLITCH_DEPLOYED // // // // // // // // // // // // // // // // // // // // //
+    </marquee>
+  </div>
+
   <p align="center">
     <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/green.png" width="100%">
   </p>
@@ -74,7 +86,7 @@ pm2 logs error-bot</pre>
     <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=30&pause=500&color=00FF00&center=true&vCenter=true&width=700&height=80&lines=MONITORAGGIO_RETE;DATA_MINING" alt="Analisi" />
   </p>
 
-  <p align="center">
+  <p align="center" style="margin-bottom: 15px;">
     <img src="https://gpvc.arturio.dev/BLOOD212/BLD-BLOOD-BOT?color=00ff00" alt="Views" />
     <img src="https://img.shields.io/github/forks/BLOOD212/BLD-BLOOD-BOT?style=for-the-badge&label=CORRUPTED_COPIES&color=00FF00&labelColor=black" alt="Forks" />
     <img src="https://img.shields.io/github/stars/BLOOD212/BLD-BLOOD-BOT?style=for-the-badge&label=EXPLOITS&color=00FF00&labelColor=black" alt="Stars" />
