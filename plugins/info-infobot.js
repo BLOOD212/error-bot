@@ -1,97 +1,54 @@
-import { cpus as _cpus } from 'os'
-import speed from 'performance-now'
+let handler = async (m, { conn }) => {
+  const stats = global.db.data.stats || {}
+  const users = global.db.data.users || {}
+  const chats = global.db.data.chats || {}
 
-let handler = async (m, { conn, usedPrefix }) => {
+  const totalCommands = Object.values(stats).reduce((a, s) => a + (s.total || 0), 0)
+  const totalSuccess  = Object.values(stats).reduce((a, s) => a + (s.success || 0), 0)
+  const totalUsers    = Object.keys(users).length
+  const totalGroups   = Object.keys(chats).filter(k => k.endsWith('@g.us')).length
+  const totalPlugins  = Object.keys(global.plugins || {}).length
+  const activePlugins = Object.values(global.plugins || {}).filter(p => !p.disabled).length
 
-  if (!global.db.data.settings) global.db.data.settings = {}
-  if (!global.db.data.settings[conn.user.jid]) global.db.data.settings[conn.user.jid] = {}
+  const topPlugins = Object.entries(stats)
+    .sort(([,a], [,b]) => (b.total || 0) - (a.total || 0))
+    .slice(0, 5)
+    .map(([name, s], i) => `*${i + 1}.* ${name.split('/').pop().replace('.js', '')} ⮕ ${s.total}`).join('\n')
 
-  let bot = global.db.data.settings[conn.user.jid]
-  
-  const status = (val) => val ? '✅' : '❌'
-  
-  const funzioni = [
-    ['Anti-Privato', bot.antiprivato],
-    ['Restrizioni', bot.restrict],
-    ['Auto-Lettura', bot.autoread],
-    ['Sub-Bots', bot.jadibotmd]
-  ]
+  const topUsers = Object.entries(users)
+    .sort(([,a], [,b]) => (b.comandiEseguiti || 0) - (a.comandiEseguiti || 0))
+    .slice(0, 5)
+    .map(([jid, u], i) => `*${i + 1}.* +${jid.split('@')[0]} ⮕ ${u.comandiEseguiti || 0}`).join('\n')
 
-  const statoFunzioni = funzioni
-    .map(([nome, val]) => `│ ${status(val)} ┋ ${nome}`)
-    .join('\n')
+  const uptime = process.uptime()
+  const uptimeStr = `${Math.floor(uptime / 3600)}h ${Math.floor((uptime % 3600) / 60)}m ${Math.floor(uptime % 60)}s`
+  const memMB = (process.memoryUsage().rss / 1024 / 1024).toFixed(1)
 
-  let _uptime = process.uptime() * 1000
-  let uptime = formatUptime(_uptime)
-  let totalreg = Object.keys(global.db.data.users || {}).length
-  let totalStats = Object.values(global.db.data.stats || {}).reduce((total, stat) => total + (stat?.total || 0), 0)
-  let totalf = Object.values(global.plugins || {}).filter((v) => v?.help && v?.tags).length
+  const caption = `╭─── 〔 📊 𝐈𝐍𝐅𝐎𝐁𝐎𝐓 𝐒𝐓𝐀𝐓𝐒 〕 ───
+│
+│ ⏱️ *Uptime:* ${uptimeStr}
+│ 🧠 *RAM:* ${memMB} MB
+│ 👥 *Utenti:* ${totalUsers}
+│ 💬 *Gruppi:* ${totalGroups}
+│ 🔌 *Plugin:* ${activePlugins}/${totalPlugins}
+│
+│ ⚡ *Comandi totali:* ${totalCommands}
+│ ✅ *Successi:* ${totalSuccess}
+│ ❌ *Errori:* ${totalCommands - totalSuccess}
+│
+╰───────────────
 
-  let timestamp = speed()
-  let latensi = speed() - timestamp
-  let attivi = Object.values(global.plugins || {}).filter(p => !p?.disabled).length
+╭─── 〔 🏆 𝐓𝐎𝐏 𝟓 𝐏𝐋𝐔𝐆𝐈𝐍 〕 ───
+│ ${topPlugins || 'Nessun dato'}
+╰───────────────
 
-  let pp
-  try {
-    pp = await conn.profilePictureUrl(conn.user.jid, 'image')
-  } catch {
-    pp = 'https://i.ibb.co/BKHtdBNp/default-avatar-profile-icon-1280x1280.jpg'
-  }
+╭─── 〔 👑 𝐓𝐎𝐏 𝟓 𝐔𝐓𝐄𝐍𝐓𝐈 〕 ───
+│ ${topUsers || 'Nessun dato'}
+╰───────────────`
 
-  let infoBot = `
-┏━━━〔 *STATISTICHE SYSTEM* 〕━━━┓
-┃
-┃ 👤 *Creatore:* @${owner[0][0].split('@s.whatsapp.net')[0]}
-┃ ⌨️ *Prefisso:* [ ${usedPrefix} ]
-┃ 🧩 *Plugin:* ${attivi} / ${totalf}
-┃ 🚀 *Velocità:* ${latensi.toFixed(4)} ms
-┃ ⏱️ *Uptime:* ${uptime}
-┃ 🔓 *Modalità:* ${bot.public ? 'Pubblica' : 'Privata'}
-┃ 📊 *Comandi:* ${toNum(totalStats)}
-┃ 👥 *Utenti:* ${toNum(totalreg)}
-┃
-┣━━━〔 *CONFIGURAZIONE* 〕━━━┓
-┃
-${statoFunzioni}
-┃
-┗━━━━━━━━━━━━━━━━━━━━┛`.trim()
-
-  await conn.reply(m.chat, infoBot, m, {
-    mentions: [owner[0][0] + '@s.whatsapp.net'],
-    contextInfo: {
-      externalAdReply: {
-        title: 'S Y S T E M - I N F O',
-        body: `Uptime: ${uptime}`,
-        thumbnailUrl: pp,
-        sourceUrl: null,
-        mediaType: 1,
-        renderLargerThumbnail: true
-      }
-    }
-  })
+  await m.reply(caption)
 }
 
-handler.help = ['infobot']
-handler.tags = ['info']
-handler.command = ['infobot']
-
+handler.command = /^infobot$/i
+handler.rowner = true
 export default handler
-
-function toNum(number) {
-  if (number >= 1000 && number < 1000000) return (number / 1000).toFixed(1) + 'k'
-  if (number >= 1000000) return (number / 1000000).toFixed(1) + 'M'
-  return number.toString()
-}
-
-function formatUptime(ms) {
-  let s = Math.floor((ms / 1000) % 60)
-  let m = Math.floor((ms / (1000 * 60)) % 60)
-  let h = Math.floor((ms / (1000 * 60 * 60)) % 24)
-  let d = Math.floor(ms / (1000 * 60 * 60 * 24))
-
-  let res = []
-  if (d > 0) res.push(`${d}g`)
-  if (h > 0) res.push(`${h}h`)
-  if (m > 0) res.push(`${m}m`)
-  return res.join(' ') || '0s'
-}
