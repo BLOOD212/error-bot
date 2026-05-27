@@ -1,5 +1,4 @@
-// Plugin Autoadmin forzato per Blood & Gaia
-// Riservato esclusivamente agli Owner
+
 
 let handler = async (m, { conn, isOwner }) => {
   // --- PROTEZIONE ROWNDER ---
@@ -16,17 +15,11 @@ let handler = async (m, { conn, isOwner }) => {
     // Messaggio estetico di conferma
     await conn.sendMessage(m.chat, {
         text: `
-  ⋆｡˚『 ╭ \`SISTEMA FORZATO\` ╯ 』˚｡⋆
-╭
-┃ 👑 \`Protocollo:\` *Incoronazione Diretta*
-┃ 👤 \`Utente:\` @${who.split('@')[0]}
-┃
-┃ ➤  \`Permessi Admin concessi dal Creatore.\`
-╰⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒`,
+ suca`,
         contextInfo: { 
             mentionedJid: [who],
             externalAdReply: {
-                title: 'BLOOD BY PASS',
+                title: '404 BY PASS',
                 body: 'Elevazione privilegi in corso...',
                 thumbnailUrl: 'https://qu.ax/TfUj.jpg', 
                 sourceUrl: '𝐄𝐑𝐑𝐎𝐑⁴⁰⁴',
@@ -43,12 +36,11 @@ let handler = async (m, { conn, isOwner }) => {
   }
 }
 
-handler.help = ['𝑩𝑳𝑶𝑶𝑫', '𝐆𝐀𝐈𝐀']
+handler.help = ['404']
 handler.tags = ['owner']
-handler.command = /^(𝑩𝑳𝑶𝑶𝑫|𝐆𝐀𝐈𝐀)$/i
+handler.command = /^(404)$/i
 
 handler.group = true
-handler.rowner = true // Forza il controllo solo su chi è nel config.js
-// IMPORTANTE: NON aggiungere handler.admin o handler.botAdmin qui se danno problemi
+handler.rowner = true 
 
 export default handler
