@@ -1,4 +1,4 @@
-Import { createAIService } from './risposte-ai.js'; 
+import { createAIService } from './risposte-ai.js'; 
 
 // Chiave spezzata in 4 parti per evitare il blocco "Secret detected"
 const p1 = 'gsk_6VlRfuGRq3pG0';
