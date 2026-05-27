@@ -18,8 +18,8 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       if (!img) return conn.reply(m.chat, '『 📸 』- `Per favore, invia un\'immagine, video o GIF per creare uno sticker.`', m);
       
       try {
-        const packName = global.authsticker || '✧˚🩸 bloodbot 🕊️˚✧';
-        const authorName = global.nomepack || '✧˚🩸 bloodbot 🕊️˚✧';
+        const packName = global.authsticker || '✧˚𝐄𝐑𝐑𝐎𝐑⁴⁰⁴˚✧';
+        const authorName = global.nomepack || '✧˚𝐄𝐑𝐑𝐎𝐑⁴⁰⁴˚✧';
         if (!global.support) {
           global.support = {
             ffmpeg: true,
@@ -45,8 +45,8 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
           }
           
           if (typeof out === 'string') {
-            const packName = global.authsticker || '✧˚🩸 varebot 🕊️˚✧';
-            const authorName = global.nomepack || '✧˚🩸 bloodbot 🕊️˚✧';
+            const packName = global.authsticker || '✧˚𝐄𝐑𝐑𝐎𝐑⁴⁰⁴˚✧';
+            const authorName = global.nomepack || '✧˚𝐄𝐑𝐑𝐎𝐑⁴⁰⁴˚✧';
             stiker = await sticker(false, out, packName, authorName);
           }
         } catch (uploadError) {
@@ -56,8 +56,8 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       }
     } else if (args[0]) {
       if (isUrl(args[0])) {
-        const packName = global.authsticker || '✧˚🩸 bloodbot 🕊️˚✧';
-        const authorName = global.nomepack || '✧˚🩸 bloodbot 🕊️˚✧';
+        const packName = global.authsticker || '✧˚𝐄𝐑𝐑𝐎𝐑⁴⁰⁴˚✧';
+        const authorName = global.nomepack || '✧˚𝐄𝐑𝐑𝐎𝐑⁴⁰⁴˚✧';
         if (!global.support) {
           global.support = {
             ffmpeg: true,
